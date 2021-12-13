@@ -1,7 +1,7 @@
-var Discord = require("discord.js");
-var client = new Discord.Client(Discord.Intents ); 
-var config = require("./config.json"); 
-var prefix = config.prefix; 
+const Discord = require("discord.js");
+const client = new Discord.Client(Discord.Intents ); 
+const config = require("./config.json"); 
+const prefix = config.prefix; 
 
 client.on("ready" , () => {
     console.log(`Connecté en tant que ${client.user.tag}`);
