@@ -1,30 +1,58 @@
-const Discord = require("discord.js")
-const bot = new Discord.Client({
-    intents : [
-         Discord.Intents.FLAGS.GUILDS,
-         Discord.Intents.FLAGS.GUILD_MESSAGES,
-         Discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-         Discord.Intents.FLAGS.GUILD_MEMBERS,
-         Discord.Intents.FLAGS.GUILD_MEMBERS,
-         Discord.Intents.FLAGS.DIRECT_MESSAGES,
-         Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-         Discord.Intents.FLAGS.GUILD_BANS,
-         Discord.Intents.FLAGS.GUILD_PRESENCES,
-         Discord.Intents.FLAGS.GUILD_MEMBERS
-    ]
-})
-const config = require("./config.json")
-const prefix = config.prefix          ["prefix"]
-const token = config["token"]
+var Discord = require("discord.js");
+var client = new Discord.Client(Discord.Intents ); 
+var config = require("./config.json"); 
+var prefix = config.prefix; 
 
-bot.on("ready", async() => {
-    console.log("Je suis connecté sur Discord !")
-    bot.user.setActivity("Je suis en développement bg ! ", {type: "STREAMING", url: "https://www.youtube.com/watch?v=dz8Dw_a9KTk"})
-    
-})
- bot.on("messageCreate", message => (
-     
-        console.log("un message à été envoyé "+ message.content.toString())
-    
- ))
-bot.login(token)
+client.on("ready" , () => {
+    console.log(`Connecté en tant que ${client.user.tag}`);
+    client.user.setStatus("online");
+    client.user.setActivity("En développement", {type: "WATCHING"});
+});
+
+// Event: message 
+client.on("message", async (message) => {
+
+    // Vérifications primaires
+    if (message.author.bot) return;
+    if (message.channel.type === "dm") return;
+    if (!message.content.startsWith(prefix)) return;
+   
+    // Commande: Ping 
+    if (message.content.startsWith(`${prefix}ping`)) {
+        message.channel.send(`:ping_pong: Pong ! ${client.ws.ping}ms`);
+    };
+
+     // Commande : Embed
+    if (message.content.startsWith(`${prefix}embed`)) {
+        let exempleEmbed = new Discord.MessageEmbed()
+
+
+        .setColor(message.member.roles.highest.color)
+        .setTitle('Some title')
+        .setURL('https://discord.js.org/')
+        .setAuthor(`${message.author.username}`, message.author.displayAvatarURL({dynamic: true }),'https://discord.js.org')
+        .setDescription('Some description here')
+        .setThumbnail('https://i.imgur.com/wSTFkRM.png')
+        .addFields(
+            { name: 'Regular field title', value: 'Some value here' },
+            { name: '\u200B', value: '\u200B' },
+            { name: 'Inline field title', value: 'Some value here', inline: true },
+            { name: 'Inline field title', value: 'Some value here', inline: true },
+        )
+        .addField('Inline field title', 'Some value here', true)
+        .setImage('https://i.imgur.com/wSTFkRM.png')
+        .setTimestamp()
+        .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
+
+        message.channel.send("Bonjour...", exempleEmbed);
+
+        // Commande: Say
+        if (message.content.startsWith(`${prefix}say`)) {}
+           var args = message.content.split(" ");
+           var messageContent = message.content.slice(args[1].length + 1); 
+
+           if (!messageContent) return message.channel.send(":x: Veuillez indiquer quelque chose à répéter !");
+    }
+});
+
+client.login(config.token); ODg4NTMyODAzMTUzNzE5MzQ2.YUUEqA.M_18iHbE1qER0lczT2g9nnfedgw
